@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -71,8 +70,9 @@ func (s *service) Login(c context.Context, req *LoginUserReq) (*LoginUserRes, er
 		return &LoginUserRes{}, err
 	}
 
-	if util.CheckPassword(req.Password, u.Password) {
-		return &LoginUserRes{}, fmt.Errorf("invalid password")
+	err = util.CheckPassword(req.Password, u.Password)
+	if err != nil {
+		return &LoginUserRes{}, err
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, MyJWTClaims{
