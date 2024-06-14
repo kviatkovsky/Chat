@@ -3,9 +3,6 @@ ifneq (,$(wildcard .env))
     export $(shell sed 's/=.*//' .env)
 endif
 
-generate:
-	protoc --proto_path=./internal/grpc ./internal/grpc/*.proto --go_out=./internal/grpc/user --go_opt=paths=source_relative --go-grpc_out=./internal/grpc/user --go-grpc_opt=paths=source_relative
-
 run:
 	go run cmd/app/main.go --config=./config/local.yaml
 
@@ -15,7 +12,7 @@ migrate-db:
 docker-rebuild:
 	docker-compose build && docker-compose up
 
-initial: migrate-db run
+up: migrate-db run
 
 test:
 	go test ./internal/grpc/...
